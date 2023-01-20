@@ -52,7 +52,7 @@
                 <h3>SISTEM E-LUAR NEGARA</h3>
             </div>
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Log masuk untuk membuat permohonan</p>
+                <p class="login-box-msg">Log masuk untuk membuat permohonans</p>
                 <form action="{{ route('login') }}" method="post">
                     {{ csrf_field() }}
                     <div class="input-group mb-3">

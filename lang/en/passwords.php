@@ -13,10 +13,17 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    // 'password' => 'Passwords must be at least six characters and match the confirmation.',
+    'reset' => 'Kata laluan telah diset semula!',
+    'sent' => 'Pautan set semula kata laluan telah dihantar ke email!',
+    'throttled' => 'Sila cuba sebentar lagi.',
+    'token' => 'Token set semula kata laluan ini tidak sah.',
+    'user' => "Email tiada dalam senarai pengguna.",
+
+    // 'reset' => 'Your password has been reset!',
+    // 'sent' => 'We have emailed your password reset link!',
+    // 'throttled' => 'Please wait before retrying.',
+    // 'token' => 'This password reset token is invalid.',
+    // 'user' => "We can't find a user with that email address.",
 
 ];

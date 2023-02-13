@@ -105,7 +105,7 @@
                 <div class="col-xl-12">
                     <div class="row">
                         <div class="col-xl-12" align="center">
-                            <img src="{{ asset('adminlte/dist/img/kelantan.png') }}" width="27%" height="27%">
+                            <img src="{{ asset('adminlte/dist/img/kelantan.png') }}" width="27%" height="13%">
                         </div>
                     </div>
                     <br>

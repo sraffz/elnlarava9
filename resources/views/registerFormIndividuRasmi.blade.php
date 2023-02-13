@@ -50,7 +50,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <!-- text input -->
                             <div class="form-group">
                                 <label><i class="fas fa-calendar"></i> Tarikh Terima Insuran</label>
@@ -59,7 +59,7 @@
                                     name="tarikh" value="{{ old('tarikh') }}">
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <!-- text input -->
                             <div class="form-group">
                                 <label><i class="fas fa-calendar"></i> Tarikh Mula Perjalanan<span
@@ -71,7 +71,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <!-- text input -->
                             <div class="form-group">
                                 <label><i class="fas fa-calendar"></i> Tarikh Akhir Perjalanan<span
@@ -80,13 +80,41 @@
                                     name="tarikhAkhir" value="{{ old('tarikhAkhir') }}" required>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 ">
                             <div class="form-group">
                                 <label><i class="fas fa-globe"></i> Negara<span style="color:red;">*</span></label>
                                 <select class="form-control select2bs4" name="negara" style="width: 100%;" required>
+                                    <option value="">SILA PILIH</option>
                                     @foreach ($negara as $jaw)
                                         <option value="{{ $jaw->namaNegara }}"
                                             {{ $jaw->namaNegara == old('negara') ? 'selected' : '' }}>
+                                            {{ $jaw->namaNegara }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mt-4 text-center">
+                            <div class="icheck-primary mb-2">
+                                <input class="icheck-primary" OnChange="javascript:enableTextBox();" type="checkbox" value="1" name="negara_lebih"
+                                    id="negara_lebih" @checked(old('negara_lebih') == '1')>
+                                <label class="form-check-label" for="negara_lebih">
+                                    Adakah melawati lebih daripada 1 negera?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 ">
+                            <div class="form-group">
+                                <label><i class="fas fa-globe"></i> Negara Tambahan<span style="color:red;">*</span>
+                            </label>
+                                <select class="form-control select2bs4" name="negara_tambahan[]" id="negara_tambahan"
+                                    style="width: 100%;" {{ old('negara_lebih') == 1 ? '' : 'disabled' }} multiple>
+                                    <option value="">SILA PILIH</option>
+                                    @foreach ($negara as $jaw)
+                                        <option value="{{ $jaw->namaNegara }}"
+                                            {{ $jaw->namaNegara == old('negara_tambahan') ? 'selected' : '' }}>
                                             {{ $jaw->namaNegara }}</option>
                                     @endforeach
                                 </select>
@@ -301,10 +329,10 @@
                         <div class="col-sm-6">
                             <!-- checkbox -->
                             <div class="form-group">
-                                <div class="form-check">
+                                <div class="icheck-info">
                                     <input class="form-check-input" type="checkbox" name="tick" id="tick"
                                         value="yes" required>
-                                    <label class="form-check-label">Segala keterangan adalah benar dan mematuhi
+                                    <label class="form-check-label" for="tick">Segala keterangan adalah benar dan mematuhi
                                         peraturan.</label>
                                 </div>
                             </div>
@@ -361,5 +389,14 @@
                 format: 'LT'
             });
         });
+    </script>
+
+    <script type="text/javascript" language="javascript">
+        function enableTextBox() {
+            if (document.getElementById("negara_lebih").checked == true)
+                document.getElementById("negara_tambahan").disabled = false;
+            else
+                document.getElementById("negara_tambahan").disabled = true;
+        }
     </script>
 @endsection

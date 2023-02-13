@@ -43,6 +43,7 @@ class PermohonanTidakBerjaya extends Notification
     public function toMail($notifiable)
     {
         $negara = $this->butiran['negara'];
+        $negara_tambahan = $this->butiran['negara_tambahan'];
         $tarikhMulaPerjalanan = $this->butiran['tarikhMulaPerjalanan'];
         $tarikhAkhirPerjalanan = $this->butiran['tarikhAkhirPerjalanan'];
         $nama = $this->butiran['nama'];
@@ -52,6 +53,7 @@ class PermohonanTidakBerjaya extends Notification
         ->subject('ELN: PEMAKLUMAN KELULUSAN PERMOHONAN KELUAR NEGARA '.$this->butiran['nama'].'')
         ->markdown('mail.permohonan.gagal', [
             'negara' => $negara,
+            'negara_tambahan' => $negara_tambahan,
             'tarikhMulaPerjalanan' => $tarikhMulaPerjalanan,
             'tarikhAkhirPerjalanan' => $tarikhAkhirPerjalanan,
             'nama' => $nama,

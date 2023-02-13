@@ -181,6 +181,16 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label for="">Negara Tambahan</label>
+                                        <input type="text" class="form-control" disabled
+                                            value="{{ $permohonan->negara_tambahan }}">
+                                    </div>
+                                </div>
+                                 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label for="">Jenis Permohonan</label>
                                         @php
                                             if ($permohonan->jenis_rombongan == '') {
@@ -259,8 +269,9 @@
                                             $i = 1;
                                         @endphp
                                         @foreach ($dokumen as $doku)
-                                            <a class="btn btn-block btn-info"
-                                                href="{{ route('detailPermohonanDokumen.download', ['id' => $doku->dokumens_id]) }}">Dokumen
+                                            <a class="btn btn-block btn-sm btn-info"
+                                                href="{{ route('detailPermohonanDokumen.download', ['id' => $doku->dokumens_id]) }}">
+                                                <i class="fa fa-download"></i> Dokumen
                                                 Rasmi {{ $i++ }}</a>
                                         @endforeach
                                     @endif
@@ -271,14 +282,56 @@
                                     @if ($permohonan->namaFileCuti == '')
                                         Tiada Dokumen
                                     @else
-                                        <a class="btn btn-sm btn-info"
-                                            href="{{ route('detailPermohonan.download', ['id' => $permohonan->permohonansID]) }}">Dokumen
-                                            Cuti</a>
+                                        <a class="btn btn-sm btn-sm btn-info"
+                                            href="{{ route('detailPermohonan.download', ['id' => $permohonan->permohonansID]) }}">
+                                            <i class="fa fa-download"></i> Dokumen Cuti</a>
                                     @endif
                                 </p>
                             @endif
+                            <hr>
+                            <strong><i class="fa fa-book margin-r-5"></i>Dokumen Sokongan</strong>
+                                <p class="text-muted">
+                                    @if ($dokumen->isEmpty())
+                                        Tiada Dokumen
+                                    @else
+                                        @php
+                                            $i = 1;
+                                        @endphp
+                                        @foreach ($dokumen_sokongan as $doku)
+                                        <div class="mt-2">
+                                            <a class="btn btn-sm btn-block btn-sm btn-info"
+                                                href="{{ route('detailPermohonanDokumensokongan.download', ['id' => $doku->dokumens_id_sokongan]) }}">
+    
+                                                <i class="fa fa-download"></i> Dokumen Sokongan {{ $i++ }}
+                                            </a>
+                                             
+                                        </div>
+                                    @endforeach
+                                    @endif
+                                </p>
                         </div>
                     </div>
+                    {{-- pembatalan jika ada --}}
+                    @if ($permohonan->pengesahan_pembatalan == 1)
+                    <div class="card card-navy">
+                        <div class="card-header">
+                            <h3 class="card-title">Pembatalan</h3>
+                        </div>
+                        <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="">Tarikh</label>
+                                    <input type="text" class="form-control" disabled value="{{ $permohonan->tarikh_batal }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Sebab pembatalan</label>
+                                    <input type="text" class="form-control" disabled value="{{ $permohonan->sebab_pembatalan }}">
+                                </div>
+                            </div>
+                       
+                        <!-- /.card-body -->
+                    </div>
+                    @endif
                     @if (Auth::user()->role == 'DatoSUK' || Auth::user()->role == 'jabatan' || Auth::user()->role == 'adminBPSM')
                         <div class="card card-primary">
                             <div class="card-header">
@@ -302,7 +355,7 @@
                     @endif
                 </div>
             </div>
-
+            
             @php
                 $jumlah = 0;
             @endphp

@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <!-- text input -->
                             <div class="form-group">
                                 <label><i class="fas fa-edit"></i> Tujuan Permohonan<span
@@ -100,18 +100,38 @@
                                     value="{{ old('tujuanRom') }}" required>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <!-- text input -->
                             <div class="form-group">
                                 <label><i class="fas fa-globe"></i> Negara<span style="color:red;">**</span></label>
                                 <select class="form-control select2bs4" name="negaraRom" id="negaraRom" style="width: 100%;"
                                     required>
+                                    <option value="">SILA PILIH</option>
                                     @foreach ($negara as $jaw)
                                         <option value="{{ $jaw->namaNegara }}"
                                             {{ $jaw->namaNegara == old('negaraRom') ? 'selected' : '' }}>
                                             {{ $jaw->namaNegara }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 ">
+                            <div class="form-group">
+                                <label><i class="fas fa-globe"></i> Negara Tambahan<span style="color:red;">*</span></label>
+                               <div class="form-check mb-2">
+                                 <input class="form-check-input" type="checkbox" value="1" name="negara_lebih_dari_satu_Rom" id="negara_lebih_dari_satu_Rom">
+                                 <label class="form-check-label" for="negara_lebih_dari_satu_Rom">
+                                   Adakah rombongan lebih daripada 1 negera?
+                                 </label>
+                               </div>
+                               <select class="form-control select2bs4" name="negara_tambahanRom" id="negara_tambahanRom" style="width: 100%;">
+                                <option value="">SILA PILIH</option>
+                                @foreach ($negara as $jaw)
+                                    <option value="{{ $jaw->namaNegara }}"
+                                        {{ $jaw->namaNegara == old('negara_tambahanRom') ? 'selected' : '' }}>
+                                        {{ $jaw->namaNegara }}</option>
+                                @endforeach
+                            </select>
                             </div>
                         </div>
                     </div>

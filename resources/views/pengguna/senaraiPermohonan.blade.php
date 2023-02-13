@@ -82,7 +82,7 @@
                                                     {{ $index + 1 }}
                                                 </td>
                                                 <td class="text-center">
-                                                    <a  href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->negara }}</a>
+                                                    <a  href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->negara }}{{ ', '.$mohonan->negara_tambahan }}</a>
                                                 </td>
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
                                                 </td>

@@ -7,7 +7,7 @@ Berikut adalah status kelulusan permohonan keluar negara ELN.
 <br><br>
 Nama: <strong>{{ $nama }}</strong> <br>
 No Kad Pengenalan: <strong>{{ $nokp }}</strong> <br>
-Negara: <strong>{{ $negara }} </strong> <br>
+Negara: <strong>{{ $negara }}@if($negara_tambahan != '') {{', '.$negara_tambahan }}@endif</strong> <br>
 Tarikh Perjalan: <strong>{{ $tarikhMulaPerjalanan }}</strong>  <br>
 Tarikh Kembali: <strong>{{ $tarikhAkhirPerjalanan }}</strong> <br>
 Status Kelulusan: <strong>Tidak Diluluskan</strong>

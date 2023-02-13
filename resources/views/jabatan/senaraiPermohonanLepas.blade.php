@@ -56,7 +56,10 @@
                                                         <td>
                                                             {{ \Carbon\Carbon::parse($mohonan->tarikhmohon)->format('d/m/Y') }}
                                                         </td>
-                                                        <td>{{ $mohonan->negara }}</td>
+                                                        <td>
+                                                            {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{ ', '.$mohonan->negara_tambahan }}
+                                                            @endif
+                                                        </td>
                                                         <td>{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
                                                         </td>
                                                         {{-- <td>{{\Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)->format('d/m/Y')}}</td> --}}

@@ -99,7 +99,10 @@
                                                 <td class="text-center">{{ $mohonan->kod_jabatan }}</td>
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhmohon)->format('d/m/Y') }}
                                                 </td>
-                                                <td class="text-center">{{ $mohonan->negara }}</td>
+                                                <td class="text-center">
+                                                    {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{ ', '.$mohonan->negara_tambahan }}
+                                                    @endif
+                                                </td>
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
                                                 </td>
                                                 {{-- <td>{{\Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)->format('d/m/Y')}}</td> --}}
@@ -123,6 +126,7 @@
                                                         </a>
                                                         <hr class="mt-1 mb-1"> 
                                                         @if ($mohonan->JenisPermohonan == 'Rasmi')
+                                                        Rasmi : 
                                                             @foreach ($dokumen as $doc)
                                                                 @if ($mohonan->permohonansID == $doc->permohonansID)
                                                                     <a class="btn btn-xs btn-primary" href="{{ route('detailPermohonanDokumen.download', ['id' => $doc->dokumens_id]) }}" target="blank"><i class="far fa-file-alt"></i></a>
@@ -130,7 +134,20 @@
                                                             @endforeach
                                                         @elseif ($mohonan->JenisPermohonan == 'Tidak Rasmi')
                                                             {{-- {{ $mohonan->pathFileCuti }} --}}
+                                                            Tidak Rasmi : 
                                                             <a class="btn btn-xs btn-info" href="{{ route('detailPermohonan.download', ['id' => $mohonan->permohonansID]) }}" target="blank"><i class="far fa-file-alt"></i></a>
+                                                        @endif
+                                                        @if ($dokumen_sokongan ?? '')
+                                                            <hr class="mt-1 mb-1">
+                                                            Sokongan :
+                                                            @foreach ($dokumen_sokongan as $doc)
+                                                                @if ($mohonan->permohonansID == $doc->permohonansID)
+                                                                    <a class="btn btn-xs btn-danger"
+                                                                        href="{{ route('detailPermohonanDokumensokongan.download', ['id' => $doc->dokumens_id_sokongan]) }}"
+                                                                        target="blank"><i class="far fa-file-alt"></i></a>
+                                                                @else
+                                                                @endif
+                                                            @endforeach
                                                         @endif
                                                     @elseif($mohonan->statusPermohonan == 'Permohonan Berjaya')
                                                         <a href="{{ url('cetak-butiran-permohonan', [$mohonan->permohonansID]) }}"

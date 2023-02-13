@@ -30,14 +30,14 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class=" ">
         <div class="row">
             <div class="col-md-12 text-center">
                 <h3 style="text-transform: uppercase">Senarai Permohonan Perjalanan Pegawai Awam Ke Luar Negara Secara
                     Individu</h3>
                 <br>
                 <br>
-                <table class="table table-bordered table-sm">
+                <table class="table table-bordered table-sm" width="100%">
                     <thead class="thead-dark">
                         <tr style="text-transform: uppercase" class="text-center">
                             <th style="width: 3%" rowspan="2">Bil</th>
@@ -65,8 +65,18 @@
                                 {{-- <td>{{ $mohonan->user->userJabatan->kod_jabatan }}</td> --}}
                                 <td>{{ \Carbon\Carbon::parse($mohonan->tarikhmohon)->format('d/m/Y') }}
                                 </td>
-                                <td>{{ $mohonan->negara }}</td>
-                                <td>{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
+                                <td>{{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{ ', '.$mohonan->negara_tambahan }}
+                                @endif</td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }} -
+                                    {{ \Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)->format('d/m/Y') }}
+
+                                    @php
+                                        $tempoh = \Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)
+                                                                ->diff(\Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan))
+                                                                ->format('%d Hari');
+                                    @endphp
+                                    <br>({{ $tempoh  }})
                                 </td>
                                 <td>{{ $mohonan->JenisPermohonan }}</td>
                                 <td>

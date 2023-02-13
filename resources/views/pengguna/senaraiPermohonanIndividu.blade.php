@@ -74,7 +74,9 @@
                                             </td>
                                             <td>
                                                 <a
-                                                    href='{{ url('detailPermohonan', [$mohonan->permohonansID]) }}'>{{ $mohonan->negara }}</a>
+                                                    href='{{ url('detailPermohonan', [$mohonan->permohonansID]) }}'>
+                                                    {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{', '.$mohonan->negara_tambahan }}@endif
+                                                </a>
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
                                             </td>

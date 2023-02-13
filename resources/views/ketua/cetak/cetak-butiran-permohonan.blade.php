@@ -116,7 +116,7 @@
                 </tr>
                 <tr>
                     <td class="text-left" style="width: 30%"><strong>Negara Yang Dilawati</strong> </td>
-                    <td class="text-left"><strong>{{ $permohonan->negara }}</strong> </td>
+                    <td class="text-left"><strong>{{ $permohonan->negara }}{{ ', '.$permohonan->negara_tambahan }}</strong> </td>
                 </tr>
                 <tr>
                     <td class="text-left" style="width: 30%"><strong>Tujuan Lawatan</strong> </td>

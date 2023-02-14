@@ -93,7 +93,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <!-- text input -->
-                            <div class="form-group">
+                            <div class="form-group mt-2">
                                 <label><i class="fas fa-edit"></i> Tujuan Permohonan<span
                                         style="color:red;">*</span></label>
                                 <input type="text" class="form-control" id="tujuanRom" name="tujuanRom"
@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-sm-4">
                             <!-- text input -->
-                            <div class="form-group">
+                            <div class="form-group mt-2">
                                 <label><i class="fas fa-globe"></i> Negara<span style="color:red;">**</span></label>
                                 <select class="form-control select2bs4" name="negaraRom" id="negaraRom" style="width: 100%;"
                                     required>
@@ -117,18 +117,18 @@
                         </div>
                         <div class="col-sm-4 ">
                             <div class="form-group">
+                                <div class="icheck-primary mb-2">
+                                  <input class="form-check-input" OnChange="javascript:pilihNegaraLain();" type="checkbox" value="1" name="negaraRom_lebih" id="negaraRom_lebih" @checked(old('negaraRom_lebih') == '1')>
+                                  <label class="form-check-label" for="negaraRom_lebih">
+                                    Adakah rombongan lebih daripada 1 negera?
+                                  </label>
+                                </div>
                                 <label><i class="fas fa-globe"></i> Negara Tambahan<span style="color:red;">*</span></label>
-                               <div class="form-check mb-2">
-                                 <input class="form-check-input" type="checkbox" value="1" name="negara_lebih_dari_satu_Rom" id="negara_lebih_dari_satu_Rom">
-                                 <label class="form-check-label" for="negara_lebih_dari_satu_Rom">
-                                   Adakah rombongan lebih daripada 1 negera?
-                                 </label>
-                               </div>
-                               <select class="form-control select2bs4" name="negara_tambahanRom" id="negara_tambahanRom" style="width: 100%;">
+                               <select class="form-control select2bs4" name="negaraRom_tambahan[]" id="negaraRom_tambahan" style="width: 100%;" disabled multiple>
                                 <option value="">SILA PILIH</option>
                                 @foreach ($negara as $jaw)
                                     <option value="{{ $jaw->namaNegara }}"
-                                        {{ $jaw->namaNegara == old('negara_tambahanRom') ? 'selected' : '' }}>
+                                        {{ $jaw->namaNegara == old('negaraRom_tambahan') ? 'selected' : '' }}>
                                         {{ $jaw->namaNegara }}</option>
                                 @endforeach
                             </select>
@@ -334,4 +334,13 @@
             }
         });
     </script>
+
+<script type="text/javascript" language="javascript">
+    function pilihNegaraLain() {
+        if (document.getElementById("negaraRom_lebih").checked == true)
+            document.getElementById("negaraRom_tambahan").disabled = false;
+        else
+            document.getElementById("negaraRom_tambahan").disabled = true;
+    }
+</script>
 @endsection

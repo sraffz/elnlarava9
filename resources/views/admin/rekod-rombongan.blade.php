@@ -62,11 +62,15 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($rombongan as $index => $rombo)
+
+                                                @php
+                                                    $id = Hashids::encode($rombo->rombongans_id, 5);
+                                                @endphp
                                                     <tr class="text-center">
                                                         <td>{{ $index + 1 }}</td>
                                                         <td>
                                                             <a
-                                                                href="{{ url('detailPermohonanRombongan', [$rombo->rombongans_id]) }}">
+                                                                href="{{ url('detailPermohonanRombongan', [$id]) }}">
                                                                 {{ $rombo->negaraRom }} </a> <br>
                                                             {{ $rombo->codeRom }}
                                                         </td>

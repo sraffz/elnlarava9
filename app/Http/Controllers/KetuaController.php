@@ -27,6 +27,8 @@ use App\Notifications\PermohonanTidakBerjaya;
 use App\Notifications\KeputusanPermohonan;
 use App\Notifications\KeputusanRombongan;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 class KetuaController extends Controller
 {
     public function index()

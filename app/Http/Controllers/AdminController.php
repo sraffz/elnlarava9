@@ -40,6 +40,8 @@ use App\Notifications\PermohonanBerjaya;
 use App\Notifications\PermohonanTidakBerjaya;
 use App\Notifications\KeputusanPermohonan;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 class AdminController extends Controller
 {
     /**
@@ -165,7 +167,7 @@ class AdminController extends Controller
             ->orderBy('tarikh_permohonan', 'desc')
             ->get();
 
-        if (Auth::user()->role == 'DatoSUK') {
+        if (Auth::user()->role == 'DatoSUK' || Auth::user()->role == 'adminBPSM') {
             // return view('ketua.senaraiPermohonan', compact('permohonan', 'sejarah', 'dokumen', 'dokumen_sokongan'));
             return view('admin.senaraiPending', compact('permohonan2'));
         } else {
@@ -320,6 +322,9 @@ class AdminController extends Controller
                 ->whereIn('status_kelulusan', ['Berjaya', 'Gagal'])
                 ->where('status_pengesah', 'disokong')
                 ->get();
+
+            $billPermohonan = '';
+
         } elseif (Auth::user()->role == 'adminBPSM') {
             // $allPermohonan = Permohonan::with('user')
             // ->get();
@@ -429,6 +434,7 @@ class AdminController extends Controller
 
     public function editPaparanRombongan($id)
     {
+        $id = Hashids::decode($id);
         $negara = Negara::all();
 
         $rombongan = Rombongan::where('rombongans_id', $id)->get();
@@ -527,6 +533,8 @@ class AdminController extends Controller
     public function show($id)
     {
         // $permohonan = Permohonan::find($id);
+
+        $id = Hashids::decode($id);
         $permohonan = DB::table('butiran_permohonan')
             ->where('permohonansID', $id)
             ->first();
@@ -575,6 +583,7 @@ class AdminController extends Controller
 
     public function showRombongan($id)
     {
+        $id = Hashids::decode($id);
         $rombongan = Rombongan::leftjoin('users', 'users.usersID', '=', 'rombongans.ketua_rombongan')
             ->where('rombongans_id', $id)
             ->get();
@@ -604,7 +613,7 @@ class AdminController extends Controller
 
         // return dd($peserta);
 
-        return view('admin.detailPermohonanRombongan', compact('lulus', 'sah', 'rombongan', 'id', 'jumlahDate', 'peserta', 'dokumen'));
+        return view('admin.detailPermohonanRombongan', compact('rombongan', 'id', 'jumlahDate', 'peserta', 'dokumen'));
     }
 
     public function download($id)
@@ -679,6 +688,8 @@ class AdminController extends Controller
 
     public function hantarRombo($id)
     {
+        $id = Hashids::decode($id);
+
         $list = Rombongan::where('rombongans_id', $id)->first();
 
         $userid = $list->usersID;

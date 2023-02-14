@@ -77,6 +77,10 @@
                                                     $last_datetime = new DateTime(now());
                                                     $interval = $first_datetime->diff($last_datetime);
                                                     $final_days = $interval->format('%a'); //and then print do whatever you like with $final_days
+
+                                                    
+                                                    $id = Hashids::encode($mohonan->permohonansID);
+                                                    
                                                 @endphp
 
                                                 @if ($first_datetime >= $last_datetime)
@@ -94,7 +98,7 @@
                                                     {{ $i++ }}
                                                 </td>
                                                 <td style="text-transform: capitalize; font-weight: bold">
-                                                    <a href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->nama }}</a>
+                                                    <a href="{{ url('detailPermohonan', [$id]) }}">{{ $mohonan->nama }}</a>
                                                 </td>
                                                 <td class="text-center">{{ $mohonan->kod_jabatan }}</td>
                                                 <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhmohon)->format('d/m/Y') }}

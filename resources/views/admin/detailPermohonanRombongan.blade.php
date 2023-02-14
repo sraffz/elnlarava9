@@ -62,6 +62,13 @@
                                             <input type="text" class="form-control" disabled
                                                 value="{{ $rombooo->negaraRom }}">
                                         </div>
+                                        @if ($rombooo->negaraRom_lebih == 1)
+                                        <div class="form-group">
+                                            <label for=""><i class="fas fa-globe"></i> Lain-lain Negara</label>
+                                            <input type="text" class="form-control" disabled
+                                                value="{{ $rombooo->negaraRom_tambahan }}">
+                                        </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-group">

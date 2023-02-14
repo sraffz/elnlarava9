@@ -5,8 +5,7 @@
 @section('link')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 
@@ -223,15 +222,19 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($permohonan2 as $index => $mohonan)
+                                                    @php
+                                                        $id = Hashids::encode($mohonan->permohonansID);
+                                                    @endphp
                                                     <tr class="text-center">
                                                         <td>{{ $index + 1 }}</td>
                                                         <td>
                                                             <a
-                                                                href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->nama }}</a>
+                                                                href="{{ url('detailPermohonan', [$id]) }}">{{ $mohonan->nama }}</a>
                                                         </td>
                                                         <td>{{ $mohonan->kod_jabatan }}</td>
                                                         <td>
-                                                            {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{ ', '.$mohonan->negara_tambahan }}
+                                                            {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1)
+                                                                {{ ', ' . $mohonan->negara_tambahan }}
                                                             @endif
                                                         </td>
                                                         <td>{{ \Carbon\Carbon::parse($mohonan->tarikh_permohonan)->format('d/m/Y') }}
@@ -253,8 +256,7 @@
                                                         </td> --}}
                                                         @if ($mohonan->status_kelulusan == 'Berjaya')
                                                             <td>
-                                                                <span type="button"
-                                                                    data-id="{{ $mohonan->id_kelulusan }}"
+                                                                <span type="button" data-id="{{ $mohonan->id_kelulusan }}"
                                                                     data-toggle="modal" data-target="#ubahstatuskelulusan"
                                                                     data-dismiss="modal"
                                                                     class="badge badge-success">{{ $mohonan->status_kelulusan }}</span>
@@ -377,8 +379,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Sebab Ditolak</h4>
                     </div>
                     {!! Form::open(['method' => 'POST', 'url' => '/sebab']) !!}
@@ -419,8 +420,7 @@
                         </div>
                         <div class="form-group">
                             <label for="sebab">Sebab Pembatalan</label>
-                            <textarea style="resize: none" class="form-control" name="sebab" disabled id="sebab"
-                                rows="3"></textarea>
+                            <textarea style="resize: none" class="form-control" name="sebab" disabled id="sebab" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -431,34 +431,34 @@
         </div>
     </div>
     @if (Auth::user()->role == 'DatoSUK')
-    <!-- Modal Tukar Kelulusan-->
-    <div class="modal fade" id="ubahstatuskelulusan" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tukar Status Kelulusan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{ url('tukarstatuskelulusan') }}" method="GET" id="ajax_tukar_status"
-                    name="ajax_tukar_status">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <input type="hidden" value="" name="id" id="id">
-                            Adakah pasti untuk menukar status permohonan ini?
+        <!-- Modal Tukar Kelulusan-->
+        <div class="modal fade" id="ubahstatuskelulusan" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tukar Status Kelulusan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ url('tukarstatuskelulusan') }}" method="GET" id="ajax_tukar_status"
+                        name="ajax_tukar_status">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <input type="hidden" value="" name="id" id="id">
+                                Adakah pasti untuk menukar status permohonan ini?
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Kemaskini</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Kemaskini</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     @endif
 
 @endsection

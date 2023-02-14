@@ -33,6 +33,8 @@ use App\Notifications\SenaraiKelulusanRombongan;
 use App\Notifications\PermohonanBerjaya;
 use App\Notifications\KeputusanPermohonan;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 class permohonanController extends Controller
 {
     public function __construct()
@@ -745,8 +747,8 @@ class permohonanController extends Controller
         $tarikhmulaAkhir = $request->input('tarikhmulaAkhir');
         $tujuanRom = $request->input('tujuanRom');
         $negaraRom = $request->input('negaraRom');
-        $negara_tambahanRom = implode(', ', $request->input('negara_tambahanRom'));
-        $negara_lebih_dari_satu_Rom = $request->input('negara_lebih_dari_satu_Rom');
+        $negaraRom_lebih = $request->input('negaraRom_lebih');
+        $negaraRom_tambahan = implode(', ', $request->input('negaraRom_tambahan'));
         $alamatRom = $request->input('alamatRom');
         $jenisKewanganRom = $request->input('jenisKewanganRom');
         $anggaranBelanja = $request->input('anggaranBelanja');
@@ -820,8 +822,8 @@ class permohonanController extends Controller
                 'jenis_rombongan' => $jenisRombongan,
                 'codeRom' => $code,
                 'negaraRom' => $negaraRom,
-                'negara_tambahanRom' => $negara_tambahanRom,
-                'negara_lebih_dari_satu_Rom' => $negara_lebih_dari_satu_Rom,
+                'negaraRom_tambahan' => $negaraRom_tambahan,
+                'negaraRom_lebih' => $negaraRom_lebih,
                 'alamatRom' => $alamatRom,
                 'statusPermohonanRom' => $statusPermohonan,
                 'catatan_permohonan' => $catatan_permohonan,
@@ -844,6 +846,8 @@ class permohonanController extends Controller
                     'tarikhMulaPerjalanan' => $tarikhMulaRom,
                     'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
                     'negara' => $negaraRom,
+                    'negara_tambahan' => $negaraRom_tambahan,
+                    'negara_lebih_dari_satu' => $negaraRom_lebih,
                     'alamat' => $alamatRom,
                     'statusPermohonan' => 'Lulus Semakan BPSM',
                     'JenisPermohonan' => 'rombongan',
@@ -897,13 +901,35 @@ class permohonanController extends Controller
                             // flash('Sorry Only Upload png , jpg , doc.')->warning();
                             return redirect('/senaraiPermohonanProses');
                         }
-                        // flash('Permohonan berjaya didaftar.')->success();
-                        Alert::success('Berjaya', 'Permohonan Berjaya DidaftarKan');
-                        return redirect('/senaraiPermohonanProses');
                     }
                 }
+                 // flash('Permohonan berjaya didaftar.')->success();
+                 Alert::success('Berjaya', 'Permohonan Berjaya DidaftarKan');
+                 return redirect('/senaraiPermohonanProses');
             } elseif ($rombo->jenis_rombongan == 'Tidak Rasmi') {
                 $co = $rombo->rombongans_id;
+
+                $data = [
+                    'tarikhMulaPerjalanan' => $tarikhMulaRom,
+                    'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
+                    'negara' => $negaraRom,
+                    'negara_tambahan' => $negaraRom_tambahan,
+                    'negara_lebih_dari_satu' => $negaraRom_lebih,
+                    'alamat' => $alamatRom,
+                    'statusPermohonan' => 'Lulus Semakan BPSM',
+                    'tarikhMulaCuti' => $tarikhMulaCuti,
+                    'tarikhAkhirCuti' => $tarikhAkhirCuti,
+                    'tarikhKembaliBertugas' => $tarikhKembaliBertugas,
+                    'JenisPermohonan' => 'rombongan',
+                    'catatan_permohonan' => $catatan_permohonan,
+                    'lainTujuan' => $tujuanRom,
+                    'tick' => 'yes',
+                    'usersID' => $id,
+                    'rombongans_id' => $co,
+                    'created_at' => \Carbon\Carbon::now(), # \Datetime()
+                    'updated_at' => \Carbon\Carbon::now(), # \Datetime()
+                ];
+                $id_permohonan_rombongan = Permohonan::insertGetID($data);
 
                 if ($request->hasFile('fileCuti')) {
                     // $allowedfileExtension=['pdf','jpg','png','docx'];
@@ -928,38 +954,13 @@ class permohonanController extends Controller
 
                             if ($upload_success) {
 
-                                // $data2 = [
-                                //     'namaFile' => $filename,
-                                //     'typeFile' => $extension,
-                                //     'pathFile' => $filePath,
-                                //     'rombongans_id' => $co,
-                                // ];
-                                // Dokumen::create($data2);
-
                                 $data = [
-                                    'tarikhMulaPerjalanan' => $tarikhMulaRom,
-                                    'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
-                                    'negara' => $negaraRom,
-                                    'negara_tambahan' => $negara_tambahanRom,
-                                    'negara_lebih_dari_satu' => $negara_lebih_dari_satu_Rom,
-                                    'alamat' => $alamatRom,
-                                    'statusPermohonan' => 'Lulus Semakan BPSM',
-                                    'tarikhMulaCuti' => $tarikhMulaCuti,
-                                    'tarikhAkhirCuti' => $tarikhAkhirCuti,
-                                    'tarikhKembaliBertugas' => $tarikhKembaliBertugas,
-                                    'JenisPermohonan' => 'rombongan',
-                                    'catatan_permohonan' => $catatan_permohonan,
                                     'namaFileCuti' => $filename,
                                     'jenisFileCuti' => $extension,
-                                    'pathFileCuti' => $filePath,
-                                    'lainTujuan' => $tujuanRom,
-                                    'tick' => 'yes',
-                                    'usersID' => $id,
-                                    'rombongans_id' => $co,
-                                    'created_at' => \Carbon\Carbon::now(), # \Datetime()
+                                    'pathFileCuti' => $filePath,                                  
                                     'updated_at' => \Carbon\Carbon::now(), # \Datetime()
                                 ];
-                                Permohonan::create($data);
+                                Permohonan::where('permohonansID', $id_permohonan_rombongan)->update($data);
                             } else {
                                 Flash::error('Error uploading ' . $doc_type);
                                 return back();
@@ -969,11 +970,11 @@ class permohonanController extends Controller
                             echo '<div class="alert alert-warning"><strong>Warning!</strong> Sorry Only Upload png , jpg , doc</div>';
                             return back('');
                         }
-                        // flash('Permohonan berjaya didaftar.')->success();
-                        Alert::success('Berjaya', 'Permohonan Berjaya DidaftarKan');
-                        return redirect('/senaraiPermohonanProses');
                     }
                 }
+                // flash('Permohonan berjaya didaftar.')->success();
+                Alert::success('Berjaya', 'Permohonan Berjaya DidaftarKan');
+                return redirect('/senaraiPermohonanProses');
             }
         }
     }
@@ -1040,6 +1041,8 @@ class permohonanController extends Controller
             $tarikhAkhirRom = $rombo->tarikhAkhirRom;
             $tarikhInsuranRom = $rombo->tarikhInsuranRom;
             $negaraRom = $rombo->negaraRom;
+            $negaraRom_tambahan = $rombo->negaraRom_tambahan;
+            $negaraRom_lebih = $rombo->negaraRom_lebih;
 
             $alamatRom = $rombo->alamatRom;
             $tujuanRom = $rombo->tujuanRom;
@@ -1068,7 +1071,9 @@ class permohonanController extends Controller
                                 'tarikhMulaPerjalanan' => $tarikhMulaRom,
                                 'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
                                 'negara' => $negaraRom,
+                                'negara_tambahan' => $negaraRom_tambahan,
                                 'alamat' => $alamatRom,
+                                'negara_lebih_dari_satu' => $negaraRom_lebih,
                                 'statusPermohonan' => $statusPermohonan,
                                 'tarikhMulaCuti' => $tarikhMulaCuti,
                                 'tarikhAkhirCuti' => $tarikhAkhirCuti,
@@ -1093,7 +1098,9 @@ class permohonanController extends Controller
                                 'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
                                 'negara' => $negaraRom,
                                 'alamat' => $alamatRom,
+                                'negara_tambahan' => $negaraRom_tambahan,
                                 'statusPermohonan' => $statusPermohonan,
+                                'negara_lebih_dari_satu' => $negaraRom_lebih,
                                 'tarikhMulaCuti' => $tarikhMulaCuti,
                                 'tarikhAkhirCuti' => $tarikhAkhirCuti,
                                 'tarikhKembaliBertugas' => $tarikhKembaliBertugas,
@@ -1169,6 +1176,8 @@ class permohonanController extends Controller
                                                 'tarikhMulaPerjalanan' => $tarikhMulaRom,
                                                 'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
                                                 'negara' => $negaraRom,
+                                                'negara_lebih_dari_satu' => $negaraRom_lebih,
+                                                'negara_tambahan' => $negaraRom_tambahan,
                                                 'alamat' => $alamatRom,
                                                 'statusPermohonan' => $statusPermohonan,
                                                 'tarikhMulaCuti' => $tarikhMulaCuti,
@@ -1196,6 +1205,8 @@ class permohonanController extends Controller
                                                 'tarikhMulaPerjalanan' => $tarikhMulaRom,
                                                 'tarikhAkhirPerjalanan' => $tarikhAkhirRom,
                                                 'negara' => $negaraRom,
+                                                'negara_lebih_dari_satu' => $negaraRom_lebih,
+                                                'negara_tambahan' => $negaraRom_tambahan,
                                                 'alamat' => $alamatRom,
                                                 'statusPermohonan' => $statusPermohonan,
                                                 'tarikhMulaCuti' => $tarikhMulaCuti,
@@ -1293,6 +1304,7 @@ class permohonanController extends Controller
 
     public function hantarIndividu($id)
     {
+        $id = Hashids::decode($id);
         $permohonan = Permohonan::with('user')
             ->where('permohonansID', '=', $id)
             ->first();
@@ -1617,14 +1629,18 @@ class permohonanController extends Controller
 
     public function padamrombongan($id)
     {
+        $id = Hashids::decode($id);
+        
         $permohonan = DB::table('permohonans')
             ->where('rombongans_id', '=', $id)
             ->get();
 
         foreach ($permohonan as $p) {
             $pathCuti = $p->pathFileCuti;
+            if ($pathCuti ?? '') {
             Storage::delete($pathCuti);
             $per = Permohonan::where('rombongans_id', $id)->delete();
+            }
         }
 
         $dokumen = DB::table('dokumens')
@@ -1650,6 +1666,7 @@ class permohonanController extends Controller
 
     public function tamatIndividu($id)
     {
+        $id = Hashids::decode($id);
         // return dd($id);
         $delfilecuti = Permohonan::where('permohonansID', $id)->first();
         // dd($delfilecuti->all());
@@ -1735,6 +1752,8 @@ class permohonanController extends Controller
 
     public function kemaskiniPermohonan($id)
     {
+        $id = Hashids::decode($id);
+
         $permohonan = Permohonan::with('pasanganPermohonan')
             // ->with('user')
             ->where('permohonansID', '=', $id)
@@ -1759,6 +1778,7 @@ class permohonanController extends Controller
 
     public function updatePermohonan(Request $request, $id)
     {
+        
         // dd($request->all());
         $id = $request->input('id');
         $tarikhinsu = $request->input('tarikh');

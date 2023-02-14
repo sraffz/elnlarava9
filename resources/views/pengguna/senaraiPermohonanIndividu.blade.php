@@ -68,13 +68,16 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($permohonan as $index => $mohonan)
+                                    @php
+                                        $id = Hashids::encode($mohonan->permohonansID);
+                                    @endphp
                                         <tr class="text-center">
                                             <td>
                                                 {{ $index + 1 }}
                                             </td>
                                             <td>
                                                 <a
-                                                    href='{{ url('detailPermohonan', [$mohonan->permohonansID]) }}'>
+                                                    href='{{ url('detailPermohonan', [$id]) }}'>
                                                     {{ $mohonan->negara }}@if ($mohonan->negara_lebih_dari_satu == 1){{', '.$mohonan->negara_tambahan }}@endif
                                                 </a>
                                             </td>

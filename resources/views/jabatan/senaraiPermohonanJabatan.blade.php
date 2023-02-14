@@ -43,14 +43,16 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($permohonan as $index => $mohonan)
+                                            @php
+                                                $id = Hashids::encode($mohonan->permohonansID);
+                                            @endphp
                                             <tr class="text-center">
                                                 <td>{{ $index + 1 }}</td>
                                                 <td style="text-transform: capitalize">
                                                     {{-- @if ($mohonan->JenisPermohonan == 'rombongan') --}}
                                                     {{-- <a href="{{ url('detailPermohonanRombongan', [$mohonan->rombongans_id]) }}">{{ $mohonan->nama }}</a> --}}
                                                     {{-- @else --}}
-                                                    <a
-                                                        href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->nama }}</a>
+                                                    <a href="{{ url('detailPermohonan', [$id]) }}">{{ $mohonan->nama }}</a>
                                                     {{-- @endif --}}
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($mohonan->tarikhmohon)->format('d/m/Y') }}
@@ -66,14 +68,15 @@
                                                 <td style="text-transform: capitalize">{{ $mohonan->JenisPermohonan }}</td>
                                                 <td>{{ $mohonan->statusPermohonan }}</td>
                                                 <td>
+
                                                     @if ($mohonan->statusPermohonan == 'Ketua Jabatan')
-                                                        <a onClick="setUserData({{ $mohonan->permohonansID }});"
-                                                            data-toggle="modal" data-target="#terimapermohonan"
+                                                        <a onClick="setUserData({{ $id }});" data-toggle="modal"
+                                                            data-target="#terimapermohonan"
                                                             class="btn btn-success btn-xs"><i class="fa fa-thumbs-up"></i>
                                                         </a>
                                                         <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-danger btn-xs"
-                                                            data-toggle="modal" data-id="{{ $mohonan->permohonansID }}"
+                                                            data-toggle="modal" data-id="{{ $id }}"
                                                             data-target="#tolakpermohonan">
                                                             <i class="fa fa-thumbs-down"></i>
                                                         </button>

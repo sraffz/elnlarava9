@@ -5,8 +5,7 @@
 @section('link')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 
@@ -36,7 +35,8 @@
                         <div class="card-header with-border">
                             <h3 class="card-title">Senarai Rombongan</h3>
                             <div class="float-right">
-                                <a class="btn btn-dark btn-sm" href="{{ url('cetak-senarai-rombongan') }}" role="button">Cetak</a>
+                                <a class="btn btn-dark btn-sm" href="{{ url('cetak-senarai-rombongan') }}"
+                                    role="button">Cetak</a>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -64,11 +64,12 @@
                                                 $i = 1;
                                             @endphp
                                             @foreach ($rombongan as $index => $rombo)
-                                            @php
+                                                @php
                                                     $first_datetime = new DateTime($rombo->tarikhMulaRom);
                                                     $last_datetime = new DateTime(now());
                                                     $interval = $first_datetime->diff($last_datetime);
                                                     $final_days = $interval->format('%a'); //and then print do whatever you like with $final_days
+                                                    $id = Hashids::encode($rombo->rombongans_id);
                                                 @endphp
 
                                                 @if ($first_datetime >= $last_datetime)
@@ -84,73 +85,65 @@
                                                     {{-- <tr style="background-color:#e46868"> --}}
                                                     <tr class="bg-gradient-danger">
                                                 @endif
-                                                 
-                                                    <td>{{ $index+1 }}</td>
-                                                    <td>
-                                                        <a href="{{ url('detailPermohonanRombongan', [$rombo->rombongans_id]) }}">{{ $rombo->negaraRom }}</a>
-                                                    </td>
-                                                    <td>{{ $rombo->codeRom }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($rombo->tarikhMulaRom)->format('d/m/Y') }}
-                                                    </td>
-                                                    <td>{{ \Carbon\Carbon::parse($rombo->tarikhAkhirRom)->format('d/m/Y') }}
-                                                    </td>
-                                                    <td>{{ $rombo->tujuanRom }}</td>
-                                                    <td>
-                                                        {{-- {{ $rombo->nama }} <br> --}}
-                                                        @foreach ($allPermohonan as $element)
-                                                            @if ($element->rombongans_id == $rombo->rombongans_id)
-                                                                {{ $element->user->nama }} &nbsp;&nbsp;
 
-                                                                @if ($rombo->statusPermohonanRom == 'Permohonan Berjaya')
-                                                                    {{-- <a class="btn-warning btn-xs disabled"><i class="fa fa-times-circle"></i></a><br> --}}
-                                                                    <br>
-                                                                @elseif($rombo->statusPermohonanRom == "Lulus Semakan")
-                                                                    <a href="{{ url('tolak-permohonan', [$element->permohonansID]) }}"
-                                                                        class="btn-danger btn-xs"
-                                                                        onclick="javascript: return confirm('Tolak Permohonan?');"><i
-                                                                            class="fa  fa-times"></i></a><br>
-                                                                @endif
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>
+                                                    <a
+                                                        href="{{ url('detailPermohonanRombongan', [$id]) }}">{{ $rombo->negaraRom }}</a>
+                                                </td>
+                                                <td>{{ $rombo->codeRom }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($rombo->tarikhMulaRom)->format('d/m/Y') }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($rombo->tarikhAkhirRom)->format('d/m/Y') }}
+                                                </td>
+                                                <td>{{ $rombo->tujuanRom }}</td>
+                                                <td>
+                                                    {{-- {{ $rombo->nama }} <br> --}}
+                                                    @foreach ($allPermohonan as $element)
+                                                        @if ($element->rombongans_id == $rombo->rombongans_id)
+                                                            {{ $element->user->nama }} &nbsp;&nbsp;
+
+                                                            @if ($rombo->statusPermohonanRom == 'Permohonan Berjaya')
+                                                                {{-- <a class="btn-warning btn-xs disabled"><i class="fa fa-times-circle"></i></a><br> --}}
+                                                                <br>
+                                                            @elseif($rombo->statusPermohonanRom == 'Lulus Semakan')
+                                                                <a href="{{ url('tolak-permohonan', [$element->permohonansID]) }}"
+                                                                    class="btn-danger btn-xs"
+                                                                    onclick="javascript: return confirm('Tolak Permohonan?');"><i
+                                                                        class="fa  fa-times"></i></a><br>
                                                             @endif
-                                                        @endforeach
-                                                    </td>
-                                                    {{-- <td>{{ $rombo->statusPermohonanRom }}</td> --}}
-                                                    {{-- <td>{{\Carbon\Carbon::parse($rombo->tarikhLulusan)->format('d/m/Y')}}</td> --}}
-                                                    <td>
-                                                        @if ($rombo->statusPermohonanRom == 'Permohonan Berjaya')
-
-                                                            <span class="label label-success">Berjaya</span>
-
-                                                        @elseif($rombo->statusPermohonanRom == "Lulus Semakan")
-
-                                                            <a href="{{ url('luluskan-rombongan', [$rombo->rombongans_id]) }}"
-                                                                class="btn btn-success btn-xs"
-                                                                onclick="javascript: return confirm('Adakah anda pasti untuk menluluskan permohonan ini?');"><i
-                                                                    class="fa fa-thumbs-up"></i></a>
-
-                                                            <a href="{{ url('tolak-rombongan', [$rombo->rombongans_id]) }}"
-                                                                class="btn btn-danger btn-xs"
-                                                                onclick="javascript: return confirm('Anda pasti untuk menolak permohonan ini?');"><i
-                                                                    class="fa fa-thumbs-down"></i></a>
-
-                                                            <a href="{{ route('cetak-butiran-rombongan', [$rombo->rombongans_id]) }}"
-                                                                class="btn btn-dark btn-xs">
-                                                                <i class="fa fa-print"></i>
-                                                            </a>
-
-                                                        @elseif($rombo->statusPermohonanRom == "Permohonan Diluluskan")
-
-                                                            <span class="label label-success">Diluluskan</span>
-
-                                                        @elseif($rombo->statusPermohonanRom == "Permohonan Diluluskan"
-                                                            or $rombo->statusPermohonanRom == "Permohonan Ditolak" or
-                                                            $rombo->statusPermohonanRom == "Lulus Semakan")
-
-                                                            <span class="label label-primary">Tiada</span>
-
                                                         @endif
-                                                    </td>
+                                                    @endforeach
+                                                </td>
+                                                {{-- <td>{{ $rombo->statusPermohonanRom }}</td> --}}
+                                                {{-- <td>{{\Carbon\Carbon::parse($rombo->tarikhLulusan)->format('d/m/Y')}}</td> --}}
+                                                <td>
+                                                    @if ($rombo->statusPermohonanRom == 'Permohonan Berjaya')
+                                                        <span class="label label-success">Berjaya</span>
+                                                    @elseif($rombo->statusPermohonanRom == 'Lulus Semakan')
+                                                        <a href="{{ url('luluskan-rombongan', [$rombo->rombongans_id]) }}"
+                                                            class="btn btn-success btn-xs"
+                                                            onclick="javascript: return confirm('Adakah anda pasti untuk menluluskan permohonan ini?');"><i
+                                                                class="fa fa-thumbs-up"></i></a>
 
+                                                        <a href="{{ url('tolak-rombongan', [$rombo->rombongans_id]) }}"
+                                                            class="btn btn-danger btn-xs"
+                                                            onclick="javascript: return confirm('Anda pasti untuk menolak permohonan ini?');"><i
+                                                                class="fa fa-thumbs-down"></i></a>
 
+                                                        <a href="{{ route('cetak-butiran-rombongan', [$rombo->rombongans_id]) }}"
+                                                            class="btn btn-dark btn-xs">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    @elseif($rombo->statusPermohonanRom == 'Permohonan Diluluskan')
+                                                        <span class="label label-success">Diluluskan</span>
+                                                    @elseif(
+                                                        $rombo->statusPermohonanRom == 'Permohonan Diluluskan' or
+                                                            $rombo->statusPermohonanRom == 'Permohonan Ditolak' or
+                                                            $rombo->statusPermohonanRom == 'Lulus Semakan')
+                                                        <span class="label label-primary">Tiada</span>
+                                                    @endif
+                                                </td>
                                             @endforeach
 
                                         </tbody>

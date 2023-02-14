@@ -5,8 +5,7 @@
 @section('link')
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte-3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <style>
         table th {
@@ -18,7 +17,7 @@
             font-size: 15px;
             font-weight: bold;
         }
-        
+
         .table tr th {
             vertical-align: middle;
 
@@ -28,7 +27,6 @@
             vertical-align: middle;
 
         }
-
     </style>
 @endsection
 
@@ -82,18 +80,25 @@
                                                     {{ $index + 1 }}
                                                 </td>
                                                 <td class="text-center">
-                                                    <a  href="{{ url('detailPermohonan', [$mohonan->permohonansID]) }}">{{ $mohonan->negara }}{{ ', '.$mohonan->negara_tambahan }}</a>
+                                                    @php
+                                                        $id = Hashids::encode($mohonan->permohonansID);
+                                                    @endphp
+                                                    <a
+                                                        href="{{ url('detailPermohonan', [$id]) }}">{{ $mohonan->negara }}{{ ', ' . $mohonan->negara_tambahan }}</a>
                                                 </td>
-                                                <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($mohonan->tarikhMulaPerjalanan)->format('d/m/Y') }}
                                                 </td>
-                                                <td class="text-center">{{ \Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)->format('d/m/Y') }}
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($mohonan->tarikhAkhirPerjalanan)->format('d/m/Y') }}
                                                 </td>
-                                                <td class="text-center">{{ $mohonan->lainTujuan }} <br> ({{ $mohonan->JenisPermohonan }})
+                                                <td class="text-center">{{ $mohonan->lainTujuan }} <br>
+                                                    ({{ $mohonan->JenisPermohonan }})
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($mohonan->statusPermohonan == 'simpanan')
                                                         <span class="badge badge-info">Deraf</span>
-                                                    @elseif($mohonan->statusPermohonan =="Lulus Semakan BPSM")
+                                                    @elseif($mohonan->statusPermohonan == 'Lulus Semakan BPSM')
                                                         <span class="badge badge-primary">Disokong</span>
                                                     @else
                                                         <span class="badge badge-info">Dihantar</span>
@@ -103,16 +108,16 @@
                                                     @if ($mohonan->statusPermohonan == 'Pending')
                                                         <span class="badge badge-warning">Dihantar</span>
                                                     @elseif($mohonan->statusPermohonan == 'simpanan')
-                                                        <a href="{{ url('hantar-permohonan-individu', [$mohonan->permohonansID]) }}"
+                                                        <a href="{{ url('hantar-permohonan-individu', [$id]) }}"
                                                             class="btn btn-success btn-xs"
                                                             onclick="javascript: return confirm('Adakah anda pasti untuk menghantar maklumat permohonan?');"
                                                             data-toggle="tooltip" title="Hantar Permohonan"
                                                             data-placement="left"><i class="fas fa-paper-plane"></i></a>
-                                                        <a href="{{ url('kemaskini-permohonan-individu', [$mohonan->permohonansID]) }}"
+                                                        <a href="{{ url('kemaskini-permohonan-individu', [$id]) }}"
                                                             class="btn btn-info btn-xs" data-toggle="tooltip"
                                                             title="Kemaskini Permohonan" data-placement="left"><i
                                                                 class="fas fa-edit"></i></a>
-                                                        <a href="{{ url('padam-permohonan', [$mohonan->permohonansID]) }}"
+                                                        <a href="{{ url('padam-permohonan', [$id]) }}"
                                                             class="btn btn-danger btn-xs"
                                                             onclick="javascript: return confirm('Padam maklumat ini?');"
                                                             data-toggle="tooltip" title="Padam Permohonan"
@@ -159,13 +164,18 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($rombongan as $index => $rombo)
+                                            @php
+                                                $id = Hashids::encode($rombo->rombongans_id, 10);
+                                            @endphp
                                             <tr>
                                                 <td>
                                                     {{ $index + 1 }}
                                                 </td>
                                                 <td>
                                                     <a
-                                                        href="{{ url('detailPermohonanRombongan', [$rombo->rombongans_id]) }}">{{ $rombo->negaraRom }}</a>
+                                                        href="{{ url('detailPermohonanRombongan', [$id]) }}">
+                                                        {{ $rombo->negaraRom }}@if($rombo->negaraRom_lebih == 1){{ ', '.$rombo->negaraRom_tambahan }}@endif
+                                                    </a>
                                                     <br> ({{ $rombo->codeRom }})
                                                 </td>
                                                 {{-- <td></td> --}}
@@ -183,17 +193,16 @@
                                                             @elseif($element->statusPermohonan == 'Permohonan Gagal')
                                                                 <span
                                                                     class="badge badge-danger">{{ $element->user->nama }}</span><br>
-
                                                             @elseif($element->statusPermohonan == 'Ketua Jabatan')
                                                                 - {{ $element->user->nama }}<br>
                                                             @elseif($element->statusPermohonan == 'Lulus Semakan BPSM' && $rombo->statusPermohonanRom == 'simpanan')
                                                                 - {{ $element->user->nama }}
                                                                 @if (!($element->user->id == Auth::user()->id))
-                                                                <a href="{{ url('tolak-permohonan', [$element->permohonansID]) }}"
-                                                                    class="btn-danger btn-xs"
-                                                                    onclick="javascript: return confirm('Padam maklumat ini?');">
-                                                                    <i class="fa  fa-times"></i>
-                                                                </a>
+                                                                    <a href="{{ url('tolak-permohonan', [$element->permohonansID]) }}"
+                                                                        class="btn-danger btn-xs"
+                                                                        onclick="javascript: return confirm('Padam maklumat ini?');">
+                                                                        <i class="fa  fa-times"></i>
+                                                                    </a>
                                                                 @endif
                                                                 <br>
                                                             @elseif($element->statusPermohonan == 'Lulus Semakan BPSM' && $rombo->statusPermohonanRom == 'Pending')
@@ -208,27 +217,28 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($rombo->statusPermohonanRom == 'Lulus Semakan')
-                                                    <span class="badge badge-primary">Disokong</span>
+                                                        <span class="badge badge-primary">Disokong</span>
                                                     @elseif ($rombo->statusPermohonanRom == 'simpanan')
-                                                    <span class="badge badge-info">Baru</span>
+                                                        <span class="badge badge-info">Baru</span>
                                                     @elseif ($rombo->statusPermohonanRom == 'Pending')
-                                                    <span class="badge badge-info">Dihantar</span>
+                                                        <span class="badge badge-info">Dihantar</span>
                                                     @else
-                                                    <span class="badge badge-info">{{ $rombo->statusPermohonanRom }}</span>
+                                                        <span
+                                                            class="badge badge-info">{{ $rombo->statusPermohonanRom }}</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($rombo->statusPermohonanRom == 'Pending')
                                                         <span class="badge badge-dark">Tiada</span>
                                                     @elseif($rombo->statusPermohonanRom == 'simpanan')
-                                                        <a href="{{ url('hantarRombongan', [$rombo->rombongans_id]) }}"
+                                                        <a href="{{ url('hantarRombongan', [$id]) }}"
                                                             class="btn btn-success btn-xs"
                                                             onclick="javascript: return confirm('Adakah anda pasti untuk menghantar maklumat permohonan?');"
                                                             data-toggle="tooltip" title="Hantar Permohonan"
                                                             data-placement="left"><i class="fas fa-paper-plane"></i></a>
-                                                        <a href="{{ url('kemaskini-rombongan', [$rombo->rombongans_id]) }}"
+                                                        <a href="{{ url('kemaskini-rombongan', [$id]) }}"
                                                             class="btn btn-info btn-xs"><i class="fas fa-edit"></i></a>
-                                                        <a href="{{ url('padam-rombongan', [$rombo->rombongans_id]) }}"
+                                                        <a href="{{ url('padam-rombongan', [$id]) }}"
                                                             class="btn btn-danger btn-xs"
                                                             onclick="javascript: return confirm('Padam maklumat ini?');"><i
                                                                 class="fa fa-user-times" data-toggle="tooltip"
@@ -237,7 +247,10 @@
                                                         <span class="badge badge-success">Berjaya</span>
                                                     @elseif($rombo->statusPermohonanRom == 'Permohonan Gagal')
                                                         <span class="badge badge-danger">Gagal</span>
-                                                    @elseif($rombo->statusPermohonanRom == 'Permohonan Berjaya' or $rombo->statusPermohonanRom == 'Permohonan Gagal' or $rombo->statusPermohonanRom == 'Lulus Semakan')
+                                                    @elseif(
+                                                        $rombo->statusPermohonanRom == 'Permohonan Berjaya' or
+                                                            $rombo->statusPermohonanRom == 'Permohonan Gagal' or
+                                                            $rombo->statusPermohonanRom == 'Lulus Semakan')
                                                         {{-- <span class="badge badge-primary">Tiada</span> --}}
                                                     @endif
                                                 </td>

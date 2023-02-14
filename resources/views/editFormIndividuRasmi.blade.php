@@ -144,7 +144,6 @@
                                 <option value="">SILA PILIH</option>
                                 @php
                                     $selected = explode(", ", $permohonan->negara_tambahan);
-
                                 @endphp
                                 @foreach ($negara as $jaw)
                                     <option value="{{ $jaw->namaNegara }}"

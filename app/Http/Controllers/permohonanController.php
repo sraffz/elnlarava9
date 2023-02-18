@@ -1141,12 +1141,12 @@ class permohonanController extends Controller
                         Alert::success('Berjaya', 'Permohonan Berjaya DidaftarKan');
                         return redirect('/senaraiPermohonanProses');
                     } elseif ($rombo->jenis_rombongan == 'Tidak Rasmi') {
-                        $validated = $request->validate([
-                            'tarikhMulaCuti' => 'required',
-                            'tarikhAkhirCuti' => 'required',
-                            'tarikhKembaliBertugas' => 'required',
-                            'fileCuti' => 'required',
-                        ]);
+                        // $validated = $request->validate([
+                        //     'tarikhMulaCuti' => 'required',
+                        //     'tarikhAkhirCuti' => 'required',
+                        //     'tarikhKembaliBertugas' => 'required',
+                        //     'fileCuti' => 'required',
+                        // ]);
                         if ($request->hasFile('fileCuti')) {
                             // $allowedfileExtension=['pdf','jpg','png','docx'];
                             // $file = $request->file('fileCuti');

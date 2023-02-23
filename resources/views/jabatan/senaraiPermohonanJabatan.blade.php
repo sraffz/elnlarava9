@@ -68,7 +68,6 @@
                                                 <td style="text-transform: capitalize">{{ $mohonan->JenisPermohonan }}</td>
                                                 <td>{{ $mohonan->statusPermohonan }}</td>
                                                 <td>
-
                                                     @if ($mohonan->statusPermohonan == 'Ketua Jabatan')
                                                         <a onClick="setUserData({{ $id }});" data-toggle="modal"
                                                             data-target="#terimapermohonan"

@@ -54,10 +54,16 @@ class AdminController extends Controller
         // $permohonan = Permohonan::all();
         //$post = Permohonan::with('pasangans')->where('statusPermohonan','=','Pending')->get();   //sama gak nga many to many
         if (Auth::user()->role == 'adminBPSM') {
-            $permohonan2 = Permohonan::join('users', 'users.usersID', '=', 'permohonans.usersID')
-                ->leftjoin('jabatan', 'jabatan.jabatan_id', '=', 'users.jabatan')
+            // $permohonan2 = Permohonan::join('users', 'users.usersID', '=', 'permohonans.usersID')
+            //     ->leftjoin('jabatan', 'jabatan.jabatan_id', '=', 'users.jabatan')
+            //     ->whereNull('rombongans_id')
+            //     ->whereIn('statusPermohonan', ['Ketua Jabatan','Lulus Semakan BPSM', 'Lulus Semakkan ketua Jabatan'])
+            //     ->get();
+
+                $permohonan2 = DB::table('senarai_rekod_permohonan_suk')
+                ->whereIn('statusPermohonan', ['Ketua Jabatan','Lulus Semakan BPSM', 'Lulus Semakkan ketua Jabatan'])
                 ->whereNull('rombongans_id')
-                ->whereIn('statusPermohonan', ['Lulus Semakan BPSM', 'Lulus Semakkan ketua Jabatan'])
+                ->orderBy('tarikh_permohonan', 'desc')
                 ->get();
         } elseif (Auth::user()->role == 'jabatan') {
             $permohonan2 = Permohonan::join('users', 'users.usersID', '=', 'permohonans.usersID')
@@ -67,13 +73,9 @@ class AdminController extends Controller
                 ->get();
         }
 
-        // $permohonan2 = DB::table('senarai_rekod_permohonan_suk')
-        // ->whereNotIn('jenisPermohonan', ['rombongan'])
-        // ->orderBy('tarikh_permohonan', 'desc')
-        // ->get();
 
         //dd($permohonan);
-        return view('admin.senaraiPending', compact('permohonan', 'permohonan2'));
+        return view('admin.senaraiPending', compact( 'permohonan2'));
     }
 
     public function profil()
